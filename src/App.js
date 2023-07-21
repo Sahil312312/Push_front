@@ -1,23 +1,41 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import PushNotificationSubscription from "../src/PushNotificationSubscription";
 
 function App() {
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker
+        .register('/sw.js')
+        .then(registration => {
+          console.log('Service Worker registered:', registration);
+        })
+        .catch(error => {
+          console.error('Error registering Service Worker:', error);
+        });
+    });
+  }
+
+  const ask = async () => {
+   // Request notification permission on component mount or at an appropriate place in your app
+if ('Notification' in window) {
+  if (Notification.permission !== 'granted') {
+    Notification.requestPermission().then(permission => {
+      // Handle the user's response to the permission request
+      if (permission === 'granted') {
+        console.log('Notification permission granted.');
+      } else {
+        console.log('Notification permission denied.');
+      }
+    });
+  }
+}
+
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+     <button onClick={PushNotificationSubscription}>sahil</button>
     </div>
   );
 }
